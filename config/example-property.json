@@ -1,0 +1,235 @@
+{
+  "accounts": {
+    "insurance": "Insurance",
+    "mortgageEscrow": "Mortgage Escrow",
+    "mortgageInterest": "Mortgage Interest Paid",
+    "mortgagePayable": "Mortgage Payable",
+    "ownerContributions": "Owner Contributions",
+    "ownerDraws": "Owner Draws",
+    "personalExpenses": "Personal Expenses (Non-Deductible)",
+    "propertyTaxes": "Property Taxes",
+    "quicksilver": "Property Card",
+    "rentalIncome": "Rental Income",
+    "repairsMaintenance": "Repairs and Maintenance",
+    "tdBank": "Operating Checking",
+    "utilities": "Utilities"
+  },
+  "allocation": {
+    "note": "Synthetic test ratio, not a recommended allocation. Confirm the actual shared-cost basis with the owner and CPA; direct rental expenses may be 100% rental.",
+    "personalShare": 0.494,
+    "rentalShare": 0.506
+  },
+  "categorizationPatterns": [
+    {
+      "action": "mortgageSplitJournal",
+      "match": {
+        "account": "Operating Checking",
+        "descriptionContains": "EXAMPLE MORTGAGE PAYMENT"
+      },
+      "notes": "Use actual paid principal, interest and escrow from the Example Mortgage statement. Debit the rental share to interest, payable and escrow; debit the remaining personal share to Owner Draws; credit Operating Bank for the full payment."
+    },
+    {
+      "account": "Utilities",
+      "action": "splitExpense",
+      "match": {
+        "descriptionContains": "EXAMPLE UTILITY"
+      },
+      "notes": "Split 50.6% to Utilities, 49.4% to Owner Draws."
+    },
+    {
+      "account": "Insurance",
+      "action": "escrowDisbursement",
+      "match": {
+        "account": "Mortgage Escrow",
+        "descriptionContains": "Example Insurance"
+      },
+      "notes": "Insurance paid from escrow. Debit Insurance, credit Mortgage Escrow (rental share)."
+    },
+    {
+      "account": "Property Taxes",
+      "action": "escrowDisbursement",
+      "match": {
+        "account": "Mortgage Escrow",
+        "descriptionContains": "Example County"
+      },
+      "notes": "Property tax paid from escrow. Debit Property Taxes, credit Mortgage Escrow (rental share)."
+    },
+    {
+      "account": "Property Taxes",
+      "action": "escrowDisbursement",
+      "match": {
+        "account": "Mortgage Escrow",
+        "descriptionContains": "Example Town"
+      },
+      "notes": "Property tax paid from escrow. Debit Property Taxes, credit Mortgage Escrow (rental share)."
+    },
+    {
+      "account": "Rental Income",
+      "action": "rentalIncome",
+      "expectedAmount": 2000,
+      "match": {
+        "descriptionContains": "EXAMPLE RENT PAYMENT",
+        "account": "Operating Checking"
+      },
+      "notes": "Unit DOWN rent via Avail. Expected $2,000.",
+      "unit": "unit-down"
+    },
+    {
+      "action": "flagForHuman",
+      "match": {
+        "descriptionContains": "Venmo",
+        "direction": "credit"
+      },
+      "notes": "Flag and skip. Check next run if owner answered.",
+      "reason": "Identify each personal Venmo cashout as owner funding. Tenant rent is recorded when received in Venmo from its verified receipt; never count the bank cashout as rent again."
+    },
+    {
+      "action": "interAccountTransfer",
+      "match": {
+        "from": "Operating Checking",
+        "isTransfer": true,
+        "to": "Property Card",
+        "descriptionContains": "EXAMPLE CARD"
+      },
+      "notes": "TD to Property Card payments are transfers, not expenses. Real descriptions look like 'EXAMPLE CARD MOBILE PMT' / 'EXAMPLE CARD CRCARDPMT'. Both the description AND one of the accounts must match, so ordinary Property Card purchases never become transfers."
+    },
+    {
+      "action": "flagForHuman",
+      "match": {
+        "isCashWithdrawal": true
+      },
+      "notes": "Needs receipt (not on credit card statement).",
+      "reason": "Cash withdrawals are likely vendor cash payments. Flag for owner identification and receipt."
+    }
+  ],
+  "closeChecklist": [
+    {
+      "description": "All Operating Bank and Property Card transactions imported through month-end",
+      "id": "import-complete"
+    },
+    {
+      "description": "Every transaction categorized, none left uncategorized",
+      "id": "all-categorized"
+    },
+    {
+      "description": "Operating Bank book balance matches Operating Bank statement",
+      "id": "td-reconciled"
+    },
+    {
+      "description": "Property Card book balance matches Property Card statement",
+      "id": "quicksilver-reconciled"
+    },
+    {
+      "description": "Rent receipts verified and unpaid rent tracked separately, respecting each tenant's payment pattern",
+      "id": "rent-verified"
+    },
+    {
+      "description": "Mortgage payment split matches actual statement principal, interest and escrow; 50.6% rental / 49.4% personal",
+      "id": "mortgage-split"
+    },
+    {
+      "description": "Any escrow disbursements recorded (property taxes, insurance paid by Example Mortgage)",
+      "id": "escrow-recorded"
+    },
+    {
+      "description": "Mortgage Payable balance ties to Example Mortgage's reported balance x 50.6%",
+      "id": "mortgage-tieout"
+    },
+    {
+      "description": "Mortgage Escrow balance ties to Example Mortgage's reported escrow x 50.6%",
+      "id": "escrow-tieout"
+    },
+    {
+      "description": "Income and expense ledger activity checked for invalid or negative balances",
+      "id": "pl-review"
+    },
+    {
+      "description": "All flagged items resolved or carried forward with a note",
+      "id": "flags-resolved"
+    },
+    {
+      "description": "Owner Draws and Owner Contributions reviewed",
+      "id": "owner-accounts-reviewed"
+    }
+  ],
+  "company": {
+    "currency": "USD",
+    "description": "Fictional example only. Replace every identity and rule before deployment.",
+    "name": "Example Rental",
+    "timezone": "America/New_York",
+    "zohoOrgId": "999000001",
+    "example": true
+  },
+  "depreciation": {
+    "frequency": "annual",
+    "note": "Annual depreciation only, booked at year-end. Not part of monthly close."
+  },
+  "escalation": {
+    "note": "Be persistent. Do not let flagged items die without owner acknowledgment.",
+    "steps": [
+      {
+        "channel": "notification",
+        "description": "Surface flagged items as a notification via Muse"
+      },
+      {
+        "channel": "email",
+        "description": "If no response to notification, escalate via email",
+        "to": "owner@example.com"
+      }
+    ]
+  },
+  "flagRules": {
+    "amountThreshold": 2500,
+    "amountThresholdNote": "Any transaction over $2,500 requires human review.",
+    "duplicates": true,
+    "duplicatesNote": "Flag duplicate-looking entries (same amount, same description, close dates).",
+    "improvementVsRepair": true,
+    "improvementVsRepairNote": "Flag anything that looks like a capital improvement vs. a repair for owner decision.",
+    "needsReceipt": true,
+    "needsReceiptNote": "Flag any transaction that does NOT appear on a credit card statement (cash, Venmo, checks) - it needs a receipt.",
+    "rentMissing": true,
+    "rentMissingNote": "Flag rent truly missing, respecting Unit UP's late pattern (do not flag before day 30).",
+    "uncategorizedAfterMatching": true
+  },
+  "units": [
+    {
+      "expectedDay": 1,
+      "id": "unit-down",
+      "customerId": "999000201",
+      "latePattern": null,
+      "monthlyRent": 2000,
+      "name": "Unit DOWN",
+      "notes": "Fictional regular payer used to exercise missing-rent checks.",
+      "paymentDestination": "Operating Bank",
+      "paymentMethod": "Avail",
+      "tenant": "Sample Tenant A"
+    },
+    {
+      "expectedDay": 1,
+      "id": "unit-up",
+      "customerId": "999000202",
+      "latePattern": {
+        "description": "Fictional late-payment example. Replace with owner-confirmed policy.",
+        "doNotFlagBeforeDay": 30,
+        "notes": "Do NOT flag rent as missing unless beyond this pattern.",
+        "typicalPaymentDays": [
+          15,
+          30
+        ]
+      },
+      "monthlyRent": 2000,
+      "name": "Unit UP",
+      "paymentDestination": "Owner personal Venmo (commingled)",
+      "paymentMethod": "Venmo",
+      "tenants": [
+        "Sample Tenant B",
+        "Sample Tenant C",
+        "Sample Tenant D"
+      ]
+    }
+  ],
+  "bankAccountIds": {
+    "tdBank": "999000101",
+    "quicksilver": "999000102"
+  }
+}

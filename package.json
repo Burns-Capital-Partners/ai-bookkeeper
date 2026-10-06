@@ -1,0 +1,24 @@
+{
+  "name": "ai-bookkeeper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "description": "Reusable single-entity rental bookkeeping worker and deployment playbook",
+  "scripts": {
+    "build": "tsc -p .",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "test": "npm run build && tsc -p tsconfig.test.json && node --test .test-build/test/*.test.js test/*.test.mjs",
+    "categorize": "node dist/index.js categorize",
+    "close": "node dist/index.js close",
+    "escalate": "node dist/index.js escalate",
+    "cli": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "25.6.0",
+    "typescript": "6.0.3"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
