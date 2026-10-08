@@ -4,7 +4,7 @@ The lead agent closes every meaningful session with two updates: the entity's pr
 
 ## The short closeout
 
-1. **Leave the entity resumable.** Refresh its shared STATUS.md, update the current milestone/open queue and evidence, preserve prior answers, name the next action and verify the shared readback. Follow [ENTITY_RECORD](ENTITY_RECORD.md).
+1. **Leave the entity resumable.** Refresh its concise shared STATUS.md with verified work and next actions; update the linked owner/CPA CONTEXT.md when facts or decisions change. Preserve detailed answers/evidence behind links and verify shared readback. Follow [ENTITY_RECORD](ENTITY_RECORD.md).
 2. **Capture only useful friction.** What failed, caused repeated questions/logins, took avoidable effort or led to a wrong result? Record the cause and the change that would prevent a recurrence. If there is no new lesson, say so; do not create filler.
 3. **Put the fix where it changes behavior.** Correct the actual intake/checklist/template for a process failure. For a code defect or proven reusable adaptation, change code and add a synthetic regression test. Keep unimplemented requests explicitly open with a concrete next action.
 4. **Verify and publish within authority.** Review the diff for private data, run applicable checks, record the commit/PR, and update the capability table. Never copy real statements, tenant identities, account IDs, tokens or production config into tests/history.

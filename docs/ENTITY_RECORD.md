@@ -1,31 +1,31 @@
-# One living record per entity
+# Two concise living documents per entity
 
-Use the existing private `STATUS.md` as the owner's home page and the next agent's entry point. Keep its established file ID and URL. Start a missing one from [the template](templates/STATUS.md); do not create a second current tracker.
+Keep the existing private STATUS.md as the bookmark. It links to one owner/CPA CONTEXT.md. Reuse existing files and URLs; these are two views of the same books, not competing trackers.
 
-## What it must answer
+## STATUS.md — completed, verified, next
 
-1. Which legal/property scope and exact Zoho organization are these books for?
-2. Through which date are accounts reconciled, on which report basis, and with what exceptions?
-3. What is automated, and when was an actual successful run observed?
-4. Which dated facts and owner decisions govern the accounting?
-5. What needs attention next, who owns it, and what may the agent do now?
-6. Where are the supporting records, prior answers, credentials references and recovery instructions?
+Aim for one screen, about 200–300 words. Use the [status template](templates/STATUS.md).
 
-Keep the current summary short. The rest can contain account/use history, standing rules, a small open queue and evidence links. Reuse existing CONTEXT/ACCESS/REVIEW_QUEUE files if present; a small entity can keep these sections in STATUS.md. Do not require more files merely to fill a template.
+- State the period covered, last verification date and any material limits.
+- Keep 3–5 cumulative bullets of work actually completed and verified, with dates and evidence links. Merge older milestones into a compact summary instead of appending a diary.
+- List the next 1–3 actions, the responsible person and any real blocker. Link the detailed queue for additional deferred items.
+- Give one honest line on automation: prepared, running or unverified, with the last observed run where available.
+- Link the owner/CPA context, supporting records and preserved history. Put commands, account IDs, journal IDs and long explanations behind those links.
 
-## Read and update rules
+## CONTEXT.md — what the owner and CPA need to know
 
-- Read the shared copy before work and again before writing. Merge concurrent changes; never overwrite it with an older local checkpoint.
-- Record both **document updated at** and **evidence checked at**. Editing a document does not refresh a balance, prove deployment or reopen a completed task.
-- At kickoff, verify that the lead can read and update the existing shared record. If a write is denied, retain the prepared update privately, report that the shared copy is stale and use the approved recovery path. Do not create an unnoticed competing tracker or change permissions silently.
-- After each material action or decision, update the top summary and affected queue row in place, retain source/journal/run IDs, and read the shared result back. Distinguish prepared, posted, reconciled, independently reviewed and running.
-- Save detailed old status prose in a dated private history archive before shortening the live record. Verify the archive is accessible and link it from STATUS.md. Keep unique owner answers, effective dates, exceptions and authority boundaries discoverable.
-- The record must name the next executable action, not just "continue." A stale setup claim prompts a targeted check, not a fresh migration, credential request or replay.
-- Never rewrite worker `current.json`/`pending.json` to manufacture evidence. A human-readable summary points to their observed timestamps and IDs.
-- Separate durable accounting decisions from provider credentials. Store only approved password-manager or host-file references, never secrets or private server URLs.
+Aim for one page of plain-language bullets; use the [context template](templates/CONTEXT.md). Explain entity/ownership and use history, reporting basis, account roles, rent/deposit/owner-transfer treatment, allocations already applied, legacy cutover and unusual events. Include material tax/accounting questions and the approved annual-adjustment responsibilities. Link reports and supporting schedules instead of copying their detail.
 
-## Resume check
+Date decisions and effective periods. Label confirmed facts, provisional assumptions and unresolved questions. Keep technical runtime instructions in existing access/evidence records. The context is maintained as facts change; a year-specific CPA brief is a dated snapshot of it and the exact reports, not another competing source of current policy. Preparing it does not authorize sending it.
 
-An agent with the repo and this one link should identify the entity, accounts, last verified period, material exceptions, next action and access limits without reading a chat. It should locate completed-entry references before any write. If a linked file is only on another machine, label that limitation and provide its approved shared location where available.
+## Update both as part of the work
 
-Do this check after a migration, after a material correction and at month-end. It is a handoff check, not a new audit of every prior month.
+1. Read the shared summary and context before acting or repeating questions. Refresh again before writing; merge concurrent changes.
+2. After each material action, update verified progress and next steps. After an owner/CPA answer or accounting-policy change, update context with the source and effective date. If context is unchanged, retain it; do not add filler.
+3. Preserve detailed old prose and unique decisions in a linked private archive before shortening. Keep unresolved items accessible until application and verification close them.
+4. Record document-update and underlying-evidence dates separately. A document edit is not a new financial audit, deployment or successful unattended run.
+5. Verify shared readback. If writing fails, retain the proposed update and disclose the stale copy; do not create a replacement tracker or silently broaden access.
+
+These updates are the working agent's required closeout, not a background document-writing service. Keep secrets outside the documents and never edit worker current.json/pending.json to manufacture evidence.
+
+**Resume check:** from STATUS.md and its links, a new agent can identify the entity, verified progress, current context, next authorized action and underlying evidence without the old chat. The owner or CPA can understand the context without reading deployment instructions.

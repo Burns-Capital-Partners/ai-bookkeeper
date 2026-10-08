@@ -1,6 +1,6 @@
 # AI bookkeeper
 
-**Start here:** [use the system for a new or existing entity](docs/START_HERE.md). Every entity has one private [living record](docs/ENTITY_RECORD.md); every working session follows the [improvement loop](docs/CONTINUOUS_IMPROVEMENT.md) so useful lessons reach the shared process and code.
+**Start here:** [use the system for a new or existing entity](docs/START_HERE.md). Every entity has a concise [work summary and owner/CPA context sheet](docs/ENTITY_RECORD.md); every working session follows the [improvement loop](docs/CONTINUOUS_IMPROVEMENT.md) so useful lessons reach the shared process and code.
 
 A reusable rental bookkeeping worker and playbook. Zoho Books holds the official books. A scheduled Node worker applies approved rules, keeps its operational history in SQLite, and exchanges evidence, questions and acknowledgments with Muse through a private Drive folder. An optional AI reviewer proposes routine classifications within a budget; it cannot directly post.
 

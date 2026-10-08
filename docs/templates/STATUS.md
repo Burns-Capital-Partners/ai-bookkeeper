@@ -1,56 +1,24 @@
-# [Entity] — books start here
+# [Entity] — current bookkeeping status
 
-Document updated: [timestamp and time zone] | Maintainer: [lead/operator]
-Canonical private URL: [this existing file] | Process: [repo URL and revision]
+Updated: [date] | Evidence last checked: [date] | Maintainer: [role]
+[Owner/CPA context](CONTEXT.md) · [Private evidence/history link]
 
-## At a glance
+**Position:** [books verified through date, basis and material exceptions].
+**Automation:** [prepared/running/unverified; last observed run, if known].
 
-- **Books:** [verified through date, basis, accounts covered and exclusions; evidence date/link].
-- **Automation:** [prepared / active / last observed run / unverified; host and evidence date].
-- **Needs the owner:** [one concise batch or none].
-- **Next action:** [specific authorized action, owner and dependency].
-- **Current scope:** [what this session/period is meant to complete; deferred work].
+## Completed and verified
 
-## Entity and standing context
+- [Date] [Cumulative milestone and verification result] — [evidence link].
+- [Date] [Latest material correction/close and result] — [evidence link].
+- [Date] [Other relevant verified milestone] — [evidence link].
 
-- Legal/property scope, ownership, currency, fiscal year and official Zoho organization ID/link: [values].
-- Dated history: [legacy profiles, cutover, personal/rental use, account changes, units/tenants when relevant].
-- Reporting/tax basis and CPA roles: [confirmed policy, source/date, who prepares/posts/reviews adjustments].
-- Rent, deposit, owner-transfer, expense/capital and allocation rules: [confirmed facts with effective dates; allocation already applied?].
-- Prior owner answers: [private link; unresolved assumptions are not confirmed rules].
+## Next
 
-| Account role | Masked source identity | Exact Zoho account/ID | Use dates / shared-account limits |
-|---|---|---|---|
-| [operating/card/wallet/mortgage/escrow/deposit/other] | [alias/last digits] | [verified value] | [coverage/policy] |
+1. [Specific next action] — [owner; dependency or decision].
+2. [Next action, only if needed] — [owner].
+3. [Next action, only if needed] — [owner].
 
-## What is verified — do not repeat
+**Needs the owner/CPA:** [one short request, or none].
+**Other open/deferred items:** [link; do not duplicate the full queue].
 
-| Milestone / period | Evidence and checked-at date | Boundaries / preserved IDs |
-|---|---|---|
-| [migration/month/correction/access/backup] | [source, report, journal or run links] | [scope, counts, exceptions] |
-
-## Open queue
-
-| ID | Issue, amount and period | State / owner | Supported next action / decision | Evidence |
-|---|---|---|---|---|
-| [stable ID] | [specific issue] | [held/provisional/deferred/blocked] | [proposal or missing evidence] | [link] |
-
-Resolved items move to history with application and verification proof. An answered question or a delivered alert is not a closed accounting issue.
-
-## Access, authority and operation
-
-- Authorized actions now: [approved scope/source/date; bounds for new writes, repairs and provisional decisions].
-- Actual executor / installed version / private runtime locations: [values or unverified].
-- Schedule / last successful unattended run / delivery and restore evidence: [separate observed receipts or unverified].
-- Connection methods and credential references: [official portal, approved operator/host, password-manager item reference, MFA recovery; no secrets].
-- Known holds: [uncertain outcomes, duplicates, missing source, capital or historical repairs].
-
-## Evidence and history
-
-- Sources and coverage manifest: [private location].
-- Latest close/reports and CPA package: [private locations, report dates and basis].
-- Detailed decisions, owner answers and prior status archive: [private links].
-- Worker snapshot / review queue / encrypted backups: [private locations, last observed dates].
-- Last session: [what changed, verification, pending dependency, and generic repo lesson/commit or none].
-
-Before editing: refresh this file and merge newer changes. After editing: verify shared readback. Updating this record does not itself authorize a financial entry or prove a deployed feature.
+Maintain about 200–300 words. Replace stale next steps and consolidate older milestones; preserve detailed history behind links. Review the linked context whenever an owner/CPA answer or accounting fact changes. Updating this summary does not itself authorize entries or prove new verification.

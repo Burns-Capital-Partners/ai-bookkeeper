@@ -1,7 +1,7 @@
 # Working on this starter
 
 - Read README.md and docs/IMPLEMENTATION_GUIDE.md before implementation. Read the entity's private STATUS.md and confirmed context before asking repeated questions.
-- Start a new or resumed engagement with docs/START_HERE.md and docs/ENTITY_RECORD.md. Reuse the entity's existing STATUS.md URL; keep its top summary current and archive lengthy history without losing decisions or evidence.
+- Start with docs/START_HERE.md and docs/ENTITY_RECORD.md. Reuse the existing STATUS.md URL; keep it to about 200–300 words of completed/verified work and next actions. Maintain the linked one-page owner/CPA CONTEXT.md whenever facts or decisions change. Preserve lengthy evidence, technical instructions and old answers behind links, not in the running summary.
 - Choose the smallest adaptation. This is a rental worker, not a general fund accounting platform. Keep Zoho as the official ledger.
 - Never copy credentials, actual statements, personal data, live state, production config or old Git history into this repository. Use synthetic fixtures. Private configs and runtime files remain excluded.
 - Preserve existing books and unrelated changes. No production posting, new schedule, irreversible migration, accounting-policy change or external message without applicable user authorization. Prepare concrete reviewable work before asking.

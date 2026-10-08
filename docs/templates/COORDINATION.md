@@ -8,7 +8,7 @@ Use the dedicated [STATUS template](STATUS.md) and [entity-record contract](../E
 
 ## CONTEXT.md and ACCESS.md
 
-Record confirmed policies/answers with topic, entity/account, source, effective dates, confidence, actual owner explanation and superseded revision. Keep a dated account/use map, receipt/transfer routes, reporting basis, asset schedule ownership, limits and repair authority. Distinguish a clue from an approved rule.
+Use the concise [owner/CPA context template](CONTEXT.md). Keep technical access details separate and link detailed owner-answer history. Record confirmed policies/answers with topic, entity/account, source, effective dates, confidence, actual owner explanation and superseded revision. Keep a dated account/use map, receipt/transfer routes, reporting basis, asset schedule ownership, limits and repair authority. Distinguish a clue from an approved rule.
 
 Access register columns: source/account role, masked identity, official portal, authorized method/operator/host, approved password-manager item reference, MFA/session requirements, observed failures, last proven account-scoped access and recovery action. Never store passwords/tokens/OTP, secret file contents or unrelated personal records here.
 

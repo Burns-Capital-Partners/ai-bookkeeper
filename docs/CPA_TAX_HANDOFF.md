@@ -13,7 +13,7 @@ Read prior answers and relevant redacted schedules from the last filed return fi
 - Were there refinances, ownership/use changes, major repairs/improvements, unusual receipts, security deposits, advance rent, owner-paid expenses or intercompany transfers? Which treatment is unresolved? Confirm relevant information-return responsibilities with the CPA.
 - What Wave or other legacy history was migrated, what was retained only as an archive, and which opening balances or prior-year adjustments are still unresolved?
 
-Save confirmed answers in the entity's private shared context with source and effective date. Do not treat a chat recollection or proposed classification as verified history.
+Maintain the concise private [owner/CPA context sheet](templates/CONTEXT.md) whenever answers or facts change, with source and effective date. Use it as the starting point for the dated annual CPA brief; link detailed schedules and keep the current work summary separate. Save confirmed answers in that shared context. Do not treat a chat recollection or proposed classification as verified history.
 
 ## 2. Close the year, then export one consistent package
 

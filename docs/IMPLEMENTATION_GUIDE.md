@@ -43,12 +43,12 @@ Property-level reporting is the default. Preserve tenant/deposit, asset and use-
 
 ## 2. Establish private records and verify sources
 
-Reuse the existing approved workspace and canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Create missing areas only; a small entity can keep context, access references and the queue in that one record. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
+Reuse the existing approved workspace and canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Keep STATUS.md to a short running summary and CONTEXT.md to a concise owner/CPA context sheet; link existing detailed access/evidence records and queues. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
 
 ```text
 <private entity folder>/
-  STATUS.md                 current milestone, remaining work and evidence
-  CONTEXT.md                dated policies/answers and account history
+  STATUS.md                 short verified-work summary and next actions
+  CONTEXT.md                living owner/CPA facts, treatment and open decisions
   REVIEW_QUEUE.md           unresolved questions, proposals and closure proof
   ACCESS.md                 methods/MFA/recovery; references, never credentials
   sources/                  unchanged bank, card, loan, PM, receipt/tax originals
