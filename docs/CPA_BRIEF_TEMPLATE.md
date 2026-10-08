@@ -17,6 +17,8 @@ Prepared [date] | [draft / final] | Reports: [cash / accrual / mixed with bridge
 
 **Year-end adjustments:** [Not requested / pending schedule / approved and posted with references / final reports reconciled].
 
+**Responsibilities:** [Who maintains/approves schedules]; [owner/authorized agent who posts]; [CPA who reviews]. [Book-to-tax adjustments retained separately, if applicable].
+
 **Requested response:** Confirm [basis/treatment/adjustments], supply [missing CPA schedule], and acknowledge the final report version. [Owner/agent] owns follow-up by [agreed date].
 
 Keep this to one page. Do not include credentials or claim the books are verified because totals balance. Do not send without the owner's existing authorization or a specific delivery approval.

@@ -1,36 +1,36 @@
 # AI bookkeeper flowchart
 
-[Printable PDF](ai-bookkeeper-flowchart.pdf) | [Executive overview](EXECUTIVE_OVERVIEW.md)
+[Printable PDF](ai-bookkeeper-flowchart.pdf) | [Executive overview](EXECUTIVE_OVERVIEW.md) | [Implementation guide](IMPLEMENTATION_GUIDE.md)
+
+The diagram is the combined operating plan. Collection, notification delivery and annual adjustments are agent/operator procedures; they require actual configured execution. Worker capability limits are in the implementation guide.
 
 ```mermaid
-%% Editable source for the executive process map. Diagram describes intended operation.
 flowchart TB
   subgraph SETUP[Set up once for each entity]
     direction LR
-    S1[1. Interview owner<br/>Context and rules] --> S2[2. Set up Zoho<br/>Migrate missing Wave history]
-    S2 --> S3[3. Connect sources<br/>Banks, cards, mortgage, rent, receipts]
-    S3 --> S4[4. Prepare worker<br/>Mac, SQLite, Drive recovery]
-    S4 --> S5[5. Prove the books<br/>Verify a month and duplicate-free rerun]
-    S5 --> S6[6. Enable schedule<br/>Observe run, backup and alert]
+    S1[1. Interview and private records<br/>Accounts, history, basis, authority] --> S2[2. Verify sources<br/>Statements, openings, month coverage]
+    S2 --> S3[3. Zoho and legacy migration<br/>Missing history; historical and current checks]
+    S3 --> S4[4. Prepare worker<br/>Actual host, inputs, cloud recovery]
+    S4 --> S5[5. Prove the books<br/>Reconciled month and unchanged rerun]
+    S5 --> S6[6. Enable and observe<br/>Unattended run, backup and delivered alert]
   end
   S6 --> C
-  subgraph REPEAT[Repeat on schedule; target prior month ready by the 7th]
-    C[Collect records<br/>Bank/card feeds and Muse] --> R{Worker checks<br/>rules and limits}
+  subgraph REPEAT[Monthly goal: prior month ready by the following 7th]
+    C[Collect records<br/>Feeds, statements, PM, loans, receipts] --> R{Worker checks<br/>rules and limits}
     R -->|Approved rule| Z[Record in Zoho<br/>Match sources once]
-    R -->|Routine unfamiliar| A[DeepSeek proposes<br/>Muse asks owner]
-    R -->|Held by controls| H[Keep issues visible<br/>Collect evidence or resolve treatment]
-    A --> D{Owner answer or<br/>72-hour policy}
-    D -->|Valid answer or eligible provisional treatment| Z
+    R -->|Routine unfamiliar| A[AI proposes<br/>Collector batches owner questions]
+    R -->|Held by controls| H[Keep issues visible<br/>Obtain evidence or approved treatment]
+    A --> D{Valid answer or<br/>eligible 72-hour default}
+    D -->|Validated treatment| Z
     D -->|Ineligible or blocked| H
-    Z --> M[Verify prior month<br/>Evidence, reconciliation and reports]
-    M -->|Complete| G[Prior month ready<br/>Target: by the 7th]
+    D -.-> L[Shared context and review ledger<br/>Provisional assumptions remain unresolved]
+    Z --> M[Verify prior month<br/>Same-cutoff balances and classifications]
+    M -->|Complete| G[Publish close and remaining issues<br/>Target: by the 7th]
     M -->|Missing evidence or error| H
     H -.->|New evidence or valid decision| C
-    D -.-> L[Shared context and review ledger<br/>Keep provisional assumptions unresolved]
   end
-  N[Controls apply before every posting.<br/>Over-limit items without an exact approved recurring match,<br/>duplicate risk and unsupported treatment remain held.<br/>Silence never teaches a permanent rule.]
-  N -.-> R
-  G -->|Year-end| CPA[CPA report package and context brief<br/>Confirm report basis and allocations already applied]
-  CPA --> ADJ[Review authorized CPA adjustments<br/>Post once, re-export and retain final version]
-
+  N[Controls before every posting:<br/>exact configured recurring amount for over-limit exceptions;<br/>duplicates, capital and historical repairs stay held.<br/>Silence never teaches a permanent rule.] -.-> R
+  G -->|Year-end| Y[Owner or authorized agent<br/>Approved annual adjustments once]
+  Y --> CPA[Verify annual expense and carryforward<br/>CPA reports, context brief, allocation already applied]
+  CPA --> F[CPA review and final adjustments<br/>Reconcile once; preserve final package]
 ```

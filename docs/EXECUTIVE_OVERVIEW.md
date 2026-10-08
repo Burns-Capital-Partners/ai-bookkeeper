@@ -2,38 +2,37 @@
 
 A repeatable setup for the next property
 
-**Purpose:** keep the official books in Zoho, automate approved work and bring the owner only exceptions. Reuse the starter with each entity's confirmed accounting rules.
+**Purpose:** keep reliable books in Zoho, automate approved work and bring the owner only exceptions. Target: the prior month ready by the following 7th.
 
 ## Tools and responsibilities
 
-- **Zoho Books:** the official accounts, entries and reports; use its existing bank feeds first.
-- **Mac mini + Node worker + SQLite:** scheduled bookkeeping, with a local history of rules, decisions and postings. Codex builds and maintains it; Codex does not need to stay open.
-- **Google Drive for desktop:** shared records, context and status, plus encrypted recovery backups. Credentials and the live database stay private on the Mac.
-- **Muse:** collects statements, asks questions and delivers alerts. Saves owner answers as shared, versioned context and asks focused follow-ups when circumstances change.
-- **DeepSeek:** proposes answers for unfamiliar routine transactions. The pilot allows $5/month for these AI calls; other service costs are separate.
+- **Zoho Books:** official entries, reports and bank/card feeds. Statements, leases and receipts supply independent evidence.
+- **Mac mini + Node worker + SQLite:** periodic processing and durable posting/review history. Codex builds and verifies; it need not stay open for the enabled worker.
+- **Private Google Drive:** shared context, evidence and current status, plus encrypted recovery backups. Credentials and the live database stay on the Mac.
+- **Muse or another collector:** downloads and verifies records, asks batched questions and delivers alerts. Humans help at actual sign-in or permission blockers.
+- **Optional DeepSeek reviewer:** proposes routine classifications within a $5 monthly budget per deployment. Owner decisions and posting controls remain separate.
 
 ## Build and verify in this order
 
-- **1. Interview the owner.** Read known facts first; clarify money flows, unusual payments, history and automation limits. Save the agreed rules and choose one month to test.
-- **2. Set up Zoho and migrate Wave.** Preserve exports and receipts, map accounts, import missing history and verify opening balances without duplicating existing entries.
-- **3. Connect the sources.** Set up bank/card feeds and statement collection. Obtain mortgage, escrow, rent and receipt evidence for a complete calendar month.
-- **4. Adapt the worker.** Apply entity-specific settings and code; verify credentials, shared inputs and backup recovery.
-- **5. Prove the books.** Run approved work, compare entries and reports with sources, then rerun unchanged inputs and confirm no additional entries.
-- **6. Enable one schedule.** Observe an unattended run, fresh cloud backup and delivered exception before declaring the system operational.
+- **1. Interview and establish private records.** Read existing answers; confirm accounts, rent/deposits, property use, history, reporting basis and authority. Property-level books are the default.
+- **2. Verify source records.** Inventory existing files; collect bank, card, mortgage/escrow, PM, receipts and relevant tax schedules. Prove opening balances and complete pilot-month coverage.
+- **3. Set up Zoho and migrate once.** Map legacy Wave accounts; bring across only missing approved history or supported openings. Preserve filed-year records and check historical and current balances.
+- **4. Prepare the worker.** Verify fit, isolated settings, actual-host access, structured inputs, cloud delivery and backup restoration. Test required adaptations.
+- **5. Prove the books.** Inspect one completed month's entries, purposes and balances. Rerun unchanged inputs and prove no new entries; independently review the result.
+- **6. Enable and observe.** Activate one approved schedule. Verify an unattended run, fresh cloud backup and actually delivered exception before calling it operational.
 
-## How a normal month should work
+## How a normal month and year work
 
-- **Daily:** record approved transactions, check the previous month and publish exceptions. Exact daily balance agreement is not the business goal.
-- **Early next month:** Muse attempts statement collection. Get human help only when authentication or permissions actually block it. Target: prior month ready by the 7th.
-- **Questions:** eligible routine proposals may be applied provisionally after 72 hours without a reply. Assumptions remain visible; large, duplicate or unsupported items stay held.
-- **Year-end:** export CPA-agreed cash/accrual reports and a one-page context brief. Explain allocations already applied; reconcile the CPA's adjustments once.
+- **Daily:** process approved rules and retain exceptions. Exact daily displayed balance agreement is not the business goal.
+- **Days 1-3 of the next month:** collect remaining statements and receipts; batch the actual human access/questions needed.
+- **Days 4-7:** reconcile the prior month and publish a concise close with remaining issues. Compare identical cutoffs; distinguish profit, operating cash and tenant funds.
+- **Questions:** eligible routine proposals may apply provisionally after 72 hours, but remain revisitable. Silence never teaches a permanent rule; integrity, duplicate, capital and historical-repair holds remain.
+- **Year-end:** owner/authorized agent posts approved annual adjustments once; verify current-year expense and next-year continuity. Deliver CPA-agreed reports and a one-page brief explaining allocations already applied.
 
-## Lessons to carry forward
+## Lessons that make the next build shorter
 
-- One lead agent, shared owner context and one current checklist prevent repeated questions and conflicting status reports.
-- Bank feeds supply transactions; statements and receipts supply evidence. Check classification as well as balances, and never record imported history twice.
-- Keep the existing tools and essential checks. Expand to another rental first; funds need additional accounting rules before reusing the process.
+- One lead, shared dated context and one current remaining-work list prevent repeated setup and conflicting status.
+- Source checks precede migration. Verified amounts, correct purposes and duplicate-free reruns matter more than a green test or a successful API response.
+- Reuse the rental code without adding infrastructure. Cash-basis reports, extra account types and annual posting need explicit adaptations/procedures; funds need additional accounting design.
 
-Starter - October 6, 2026: standalone tests passed. Live posting, a verified month, duplicate-free rerun and unattended operation remain unproven for each new deployment.
-
-[Printable one-page PDF](ai-bookkeeper-executive-overview.pdf) | [CPA handoff](CPA_TAX_HANDOFF.md)
+October 7, 2026 | Combined lessons from two builds. This is the operating plan; each entity must prove its own live acceptance. Annual posting and collection remain agent/operator procedures.

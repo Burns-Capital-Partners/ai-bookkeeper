@@ -8,3 +8,7 @@
 - Keep per-entity state, inputs, Drive folders and schedules separate. Check account overlap before allowing another writer in the same organization.
 - Confirm the CPA's reporting basis and whether allocation is already applied. Current-year depreciation and accumulated depreciation are different checks. Unexplained balances remain questions until source records establish a cause.
 - Keep one evidence-backed progress file in private entity storage. Lead the next authorized step; report only what remains. Never equate downloaded, staged, accepted, posted, reconciled and tax-final.
+- Verify source reliability before legacy migration. Search all journal dates and check historical closing, new opening, target month and current balances after corrections; normal carryforward is not another opening entry.
+- Batch factual questions and collection while access is usable; preserve dated account/use history and prior answers. Property-level reporting is the default, with detail retained where treatment requires it.
+- Check the implementation guide's capability table before claiming support. Current reports enforce accrual; annual depreciation/amortization and additional accounts require reviewed procedures/adaptations.
+- Use docs/MONTHLY_CLOSE.md, docs/YEAR_END_CLOSE.md and docs/OPERATOR_GUIDE.md for continuing operations. Agree annual schedule preparation, posting and CPA review roles; never assume the accountant writes the entries.

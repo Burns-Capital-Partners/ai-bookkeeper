@@ -1,10 +1,10 @@
 # CPA and tax handoff
 
-Turn the year's bookkeeping into a small, traceable package for the accountant. The AI prepares reports and explains context; the CPA determines tax treatment and signs off. A successful monthly worker run is not a completed tax return.
+Turn the year's bookkeeping into a small, traceable package for the accountant. Agree who prepares schedules, posts and reviews: the owner/authorized agent can post approved annual entries; the CPA reviews tax treatment and the final package. Do not assume the CPA edits Zoho. A successful monthly worker run is not a completed tax return. Follow [YEAR_END_CLOSE](YEAR_END_CLOSE.md) first.
 
 ## 1. Add these questions to the initial owner interview
 
-Read prior answers and the last filed return first. Ask one material question at a time; skip irrelevant branches.
+Read prior answers and relevant redacted schedules from the last filed return first. Batch unresolved factual questions by topic; ask consequential policy decisions separately. Skip irrelevant branches.
 
 - Who prepares the return, which entity/tax classification and fiscal year apply, and when does that CPA want the package? Confirm the delivery channel and authorization separately from drafting.
 - Which accounting method did the prior return use, and does the CPA want cash, accrual or both report sets? A report's basis label does not establish the adopted tax method. Do not change organization settings or tax elections to make reports match.
@@ -22,7 +22,7 @@ Save confirmed answers in the entity's private shared context with source and ef
 3. Confirm the CPA's reporting basis and export the reports below. For a calendar year, the annual period is January 1 through December 31; use the actual fiscal dates otherwise.
 4. Draft the one-page brief from those exact exports and the confirmed context. List unresolved items with evidence, amount, proposed treatment if supported, and responsible person. Do not invent explanations.
 5. Obtain authorization to deliver to the named CPA. Retain the sent version and actual delivery receipt in the private entity folder.
-6. Receive the CPA's adjustment schedule. Review the exact entries, account/basis/date, prior postings and authority before posting once. Re-export the affected reports and reconcile the changes to that schedule. Retain the CPA's final acknowledgment and approved tax schedules.
+6. Obtain the approved annual/CPA adjustment schedule. The designated owner/agent reviews exact entries, account/basis/date, prior postings and authority, then posts once. Re-export affected reports and reconcile current-year expense and cumulative balances to that schedule. Retain the CPA's final acknowledgment and approved tax schedules. A tax-return-only adjustment needs an explicit book-to-tax bridge; do not call it posted in Zoho.
 
 | Report or supporting record | Period / content | Purpose |
 |---|---|---|
@@ -38,6 +38,8 @@ Save confirmed answers in the entity's private shared context with source and ef
 | Conditional supporting records | Receipts/capital invoices, leases, deposits/advance rent, payment-processor tax forms, receivable/payable aging where relevant | Support treatment without counting the same money twice |
 
 The bank/card account's signed balance is not automatically a rewards balance. Reconcile it to the statement and ledger before labeling it cash back. Accumulated depreciation is cumulative; it does not by itself prove the current year's expense. These are verification prompts, not automatic error findings.
+
+For any opening or historical correction, search all dates for earlier and later corrective journals, and verify the prior close, next opening, reporting-year end and current balances. Do not add a second opening entry for normal year-to-year carryforward. Preserve filed asset continuity and resolve conflicts between prior schedules before posting.
 
 ## 3. Pull the reports in Zoho
 

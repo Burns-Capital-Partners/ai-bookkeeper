@@ -2,13 +2,17 @@
 
 A reusable rental bookkeeping worker and playbook. Zoho Books holds the official books. A scheduled Node worker applies approved rules, keeps its operational history in SQLite, and exchanges evidence, questions and acknowledgments with Muse through a private Drive folder. An optional AI reviewer proposes routine classifications within a budget; it cannot directly post.
 
-Start with the [executive overview](docs/EXECUTIVE_OVERVIEW.md), [flowchart](docs/FLOWCHART.md), and [implementation guide](docs/IMPLEMENTATION_GUIDE.md). The guide includes the owner interview, legacy Wave migration, bank/card feeds, statement and receipt collection, deployment, acceptance checks and lessons learned. Annual reporting follows the [CPA handoff](docs/CPA_TAX_HANDOFF.md) and [one-page brief template](docs/CPA_BRIEF_TEMPLATE.md).
+Start with the [executive one-pager](docs/EXECUTIVE_OVERVIEW.md) ([PDF](docs/ai-bookkeeper-executive-overview.pdf)) and [flowchart](docs/FLOWCHART.md) ([PDF](docs/ai-bookkeeper-flowchart.pdf)). The [implementation guide](docs/IMPLEMENTATION_GUIDE.md) gives the order of operations, owner interview, source checks, Wave-to-Zoho migration, worker setup and acceptance gates. It consolidates the lessons from two rental builds and their accounting reviews.
+
+For ongoing use: [operator refresher](docs/OPERATOR_GUIDE.md), [monthly close](docs/MONTHLY_CLOSE.md), [year-end close](docs/YEAR_END_CLOSE.md), [CPA handoff](docs/CPA_TAX_HANDOFF.md) and [CPA brief template](docs/CPA_BRIEF_TEMPLATE.md). Future agents can reuse the [private coordination templates](docs/templates/COORDINATION.md) and [lessons learned](docs/LESSONS_LEARNED.md).
 
 ## Scope
 
 The implemented workflow supports a USD rental entity using Zoho's US data center, one operating bank account, one card account, configured rental units and mortgage/escrow records. It is a starting point for the next similar property. Funds, waterfalls, general settlement processing, deposits and materially different accounting treatments require explicit design and tests. PDF downloading/extraction, legacy data migration, tax preparation and notification delivery remain agent/operator workflows, not hidden worker features.
 
 The sample configuration is fictional and cannot connect to Zoho. Its rules, allocation, identifiers, tenant patterns and dollar limits are examples, not advice or approved defaults. Keep one deployment per entity. Do not run overlapping workers against the same Zoho accounts.
+
+Property-level books are the default; preserve unit detail where it affects use, tenants, deposits or assets. **Current limits:** worker reports enforce accrual, and there is no annual depreciation/amortization posting command. Cash-basis close checks and additional bank/card/loan/deposit workflows need tested adaptations. See the guide's [capability table](docs/IMPLEMENTATION_GUIDE.md#what-the-code-does-today) before deployment. A documented procedure is not an implemented feature.
 
 ## Install and verify locally
 
@@ -24,7 +28,7 @@ Tests use synthetic fixtures, mock API responses and temporary local SQLite data
 
 ## Prepare one real entity
 
-1. Follow the interview and migration stages before automating classifications. Inventory existing records; do not replay legacy transactions merely because this worker has empty state.
+1. Follow the interview, independent source preflight and migration stages before automating classifications. Inventory existing records; do not replay legacy transactions merely because this worker has empty state. Verify legacy closing, new opening, pilot and current balances after historical corrections.
 2. Copy `config/example-property.json` to `config/<entity-slug>.json`. Real configs are Git-ignored. Replace the organization, account names, bank IDs, customer IDs, rules, rent patterns, allocations and notification destination with verified values. Set `company.example=false` only for the reviewed real config. The keys `tdBank` and `quicksilver` are legacy internal roles for operating bank and card; the actual names and IDs are configurable.
 3. Build with `npm run build`. On the Mac run `node scripts/prepare-mac.mjs --config <entity-slug>`. This prepares private files but starts nothing. Runtime lives under `~/Library/Application Support/AIBookkeeper/<entity-slug>/`; each entity receives a different job label, database, env file and handoff folder.
 4. Enter Zoho credentials in that private `bookkeeper.env` file. A Generate Code authorization code is not a refresh token: exchange the approved one-time code using the matching OAuth client and securely retain the returned refresh token. Begin with the scopes required for the intended read checks; verify the required write grants separately before authorized production use. Never put values in chat, Git, screenshots or logs. Confirm data-center compatibility.
@@ -48,4 +52,6 @@ Keep this repository private initially; it has no public reuse license. Share wi
 
 To start another build, give an agent access to this repo and the entity's private records, then say:
 
-> Follow docs/IMPLEMENTATION_GUIDE.md for [entity]. Read existing context and status, interview me only about unresolved business decisions, preserve migrated history, and lead the authorized work through the acceptance checks. Keep one current status file. Include CPA report basis and allocations already applied. Do not call the system operational until the month, unchanged rerun, schedule, delivery and recovery are proven.
+> Follow docs/IMPLEMENTATION_GUIDE.md for [entity] and [private folder]. Read existing context/status first, batch unresolved factual questions and ask me real business decisions. Lead the authorized source checks, legacy migration, smallest worker adaptation and acceptance checks. Preserve filed history and one current status. Include the CPA reporting basis and allocations already applied. Continue independent work while questions are pending. Do not call the system operational until the month, unchanged rerun, schedule, delivery and recovery are proven.
+
+GitHub is the canonical reusable process/code version. Entity-specific decisions and live status remain in the approved private workspace. A copied Drive guide should name its repository revision; do not maintain competing current playbooks.
