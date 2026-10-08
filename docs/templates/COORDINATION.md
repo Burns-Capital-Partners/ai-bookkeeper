@@ -4,27 +4,7 @@ Copy the sections into the approved private entity workspace. Do not fill this r
 
 ## STATUS.md
 
-```markdown
-# [Entity] current status
-Updated: [timestamp/time zone] | Lead: [role] | Revision: [version]
-Goal: [period complete by deadline; precise scope]
-Current stage: [interview / source check / migration / preparation / acceptance / operation]
-Verified through: [date, account coverage, basis and material exclusions]
-
-## Remaining
-| ID | Item / dependency | State | Owner | Evidence / next action |
-|---|---|---|---|---|
-| [stable ID] | [concrete item] | [pending/blocked/verified] | [role] | [reference] |
-
-## Next checkpoint
-[Authorized next action; approximate timing if justified; actual human blocker]
-
-## Acceptance receipts
-[Month + rerun IDs; source coverage; actual schedule/run; delivery; restore]
-
-## Decisions / completed evidence
-[Preserve durable references; revise a closed item only with contrary evidence]
-```
+Use the dedicated [STATUS template](STATUS.md) and [entity-record contract](../ENTITY_RECORD.md). Update the existing shared file in place. Link archived history instead of accumulating a second current tracker.
 
 ## CONTEXT.md and ACCESS.md
 

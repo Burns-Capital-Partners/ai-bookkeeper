@@ -33,7 +33,10 @@ This is a generalized review of the original rental build and the follow-on buil
 | Journal UI totals or success responses were unreliable evidence. | Read back published journal IDs, amounts, basis visibility and affected balances. |
 | Blind retry after a write timeout risked double posting. | Inspect the remote outcome/reference before retry and retain explicit recovery evidence. |
 | Exact daily balance differences distracted from the business goal. | Compare identical cutoffs and target prior-month books by the following 7th. |
-| Cash-basis organization settings did not fix an accrual-only worker. | Check report calls and journal visibility; require a tested adaptation for cash-basis close acceptance. |
+| Cash-basis organization settings did not fix an accrual-only worker. | Set and verify `company.reportingBasis`; cash/accrual request and response validation now have regression tests. Verify each entity's live journal/report visibility. |
+| A core close omitted extra account obligations. | Configure `supplementalCloseAccounts`; manual reviewed-source checks now block missing or mismatching ledgers. Daily ingestion of those reviews remains unimplemented. |
+| Long status histories and stale shared copies hid the actual next step. | Maintain one concise canonical [entity record](ENTITY_RECORD.md), preserve linked history and verify shared readback. |
+| Useful second-build fixes stayed in a private preparation folder. | Finish every meaningful run with the [improvement loop](CONTINUOUS_IMPROVEMENT.md); promote tested generic fixes and record adoption separately. |
 | Accumulated depreciation was mistaken for current-year expense. | Use approved annual schedules; separately verify P&L expense and accumulated balances. |
 | Tax schedules conflicted or the posting role was unclear. | Preserve filed continuity, resolve schedule conflicts and agree owner/agent posting versus CPA review. |
 | A personal/rental split could be applied a second time by the CPA. | Put allocation-already-applied at the top of the brief and label asset/debt scope. |

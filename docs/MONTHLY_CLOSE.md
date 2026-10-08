@@ -30,5 +30,6 @@ Read current private status, context and accepted source evidence. Reuse complet
 - [ ] Record closing status accurately: reconciled, reconciled with specified exceptions, or incomplete. Unexplained material differences cannot be waived into "reconciled."
 - [ ] Publish worker/cloud evidence and verify the actual notification receipt. Update the same private status and stop repetitive reminders when resolved.
 - [ ] Surface a few optional saving opportunities separately; distinguish profit, operating cash and funds owed to tenants.
+- [ ] Complete the [improvement loop](CONTINUOUS_IMPROVEMENT.md): refresh the canonical [entity record](ENTITY_RECORD.md), verify shared readback, and put any newly demonstrated reusable fix into the actual checklist/code with appropriate tests. Record repo publication separately from deployment adoption.
 
 An expected late payment can remain a collection follow-up under the approved policy. A balance discrepancy, missing source period or duplicate risk requires separate resolution and must remain visible.

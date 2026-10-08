@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { ExistingBankMatchError, ZohoBooksClient } from "../src/zoho.js";
-import type { BankTransaction, JournalEntry } from "../src/types.js";
+import type { BankTransaction, JournalEntry, ReportingBasis } from "../src/types.js";
 
 const accounts = [
   { account_id: "1", account_name: "Operating Checking", account_type: "bank" },
@@ -31,7 +31,7 @@ const register = (rows: object[], context: object = {}) => ok({
   register_transactions: { account_transactions: [{ account_transactions: rows }] },
   page_context: { ...reportMeta("register_transactions", "2026-08-29", "2026-09-04"), page: 1, has_more_page: false, ...context },
 });
-function fixture(handle: (call: Call) => Response | Promise<Response>, live = true) {
+function fixture(handle: (call: Call) => Response | Promise<Response>, live = true, reportingBasis?: ReportingBasis) {
   const calls: Call[] = [];
   const fetcher = (async (input, init) => {
     const url = new URL(String(input)), method = init?.method ?? "GET";
@@ -44,7 +44,7 @@ function fixture(handle: (call: Call) => Response | Promise<Response>, live = tr
     return handle(call);
   }) as typeof fetch;
   return { calls, client: new ZohoBooksClient("999000001", { clientId: "test-id", clientSecret: "test-secret", refreshToken: "test-refresh",
-    writeEnabled: live, bankAccounts: ["Operating Checking", "Property Card"], fetch: fetcher }) };
+    writeEnabled: live, reportingBasis, bankAccounts: ["Operating Checking", "Property Card"], fetch: fetcher }) };
 }
 
 test("OAuth refresh is shared across concurrent reads and reused", async () => {
@@ -207,6 +207,7 @@ test("native accrual P&L returns account totals without counting group totals", 
     assert.equal(url.searchParams.get("filter_by"), "TransactionDate.CustomDate");
     assert.equal(url.searchParams.get("from_date"), "2025-01-01");
     assert.equal(url.searchParams.get("to_date"), "2025-12-31");
+    assert.equal(url.searchParams.get("cash_based"), "false");
     return ok({ profit_and_loss: [
       { name: "Gross Profit", total: 3000, account_transactions: [{ name: "Operating Income", total: 3000,
         account_transactions: [{ account_id: "3", name: "Rental Income", total: 3000 }] }] },
@@ -216,6 +217,47 @@ test("native accrual P&L returns account totals without counting group totals", 
   }, false);
   assert.deepEqual(await f.client.getProfitAndLoss("2025-01-01", "2025-12-31"), { "Rental Income": 3000, Repairs: 50 });
   await assert.rejects(f.client.getProfitAndLoss("2025-12-31", "2025-01-01"), /reversed/);
+});
+
+test("cash P&L requests cash and requires matching effective report basis", async () => {
+  const f = fixture(({ url, method }) => {
+    assert.equal(method, "GET");
+    assert.equal(url.pathname, "/books/v3/reports/profitandloss");
+    assert.equal(url.searchParams.get("cash_based"), "true");
+    assert.equal(url.searchParams.get("from_date"), "2026-09-01");
+    assert.equal(url.searchParams.get("to_date"), "2026-09-30");
+    return ok({ profit_and_loss: [{ name: "Income", total: 4600,
+      account_transactions: [{ account_id: "3", name: "Rental Income", total: 4600 }] }],
+      page_context: { ...reportMeta("profit_and_loss", "2026-09-01", "2026-09-30"), report_basis: "Cash", cash_based: "true" } });
+  }, false, "cash");
+  assert.deepEqual(await f.client.getProfitAndLoss("2026-09-01", "2026-09-30"), { "Rental Income": 4600 });
+});
+
+test("cash P&L rejects wrong or contradictory basis and wrong effective dates", async () => {
+  for (const context of [
+    { report_basis: "Accrual", cash_based: "false" },
+    { report_basis: "Cash", cash_based: "false" },
+    { report_basis: "Accrual", cash_based: "true" },
+    { report_basis: undefined }, { cash_based: undefined },
+    { from_date: "2026-08-01" }, { to_date: "2026-10-01" },
+    { applied_filter: "TransactionDate.Today" },
+  ]) {
+    const f = fixture(() => ok({ profit_and_loss: [{ account_id: "3", name: "Rental Income", total: 4600 }],
+      page_context: { ...reportMeta("profit_and_loss", "2026-09-01", "2026-09-30"), report_basis: "Cash", cash_based: "true", ...context } }), false, "cash");
+    await assert.rejects(f.client.getProfitAndLoss("2026-09-01", "2026-09-30"), /requested cutoff and cash basis/);
+  }
+});
+
+test("cash P&L selection preserves complete ledger balance and register reconciliation", async () => {
+  const f = fixture(({ url }) => {
+    assert.equal(url.searchParams.get("cash_based"), "false");
+    if (url.pathname.endsWith("/trialbalance")) return trial([{ account_id: "1", net_debit_total: 4600, net_credit_total: 0 }]);
+    assert.equal(url.pathname, "/books/v3/registers/1/transactions");
+    return register([{ account_id: "1", transaction_id: "cash-received", date: "2026-09-01", debit: 2300, credit: 0 }]);
+  }, false, "cash");
+  assert.equal(await f.client.getLedgerBalance("Operating Checking", "2026-09-30"), 4600);
+  const activity = await f.client.listAccountActivity("Operating Checking", "2026-08-29", "2026-09-04");
+  assert.deepEqual(activity.map(r => [r.id, r.amount]), [["cash-received", 2300]]);
 });
 
 test("P&L rejects wrong dates, duplicate accounts and missing amounts", async () => {

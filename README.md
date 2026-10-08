@@ -1,8 +1,12 @@
 # AI bookkeeper
 
+**Start here:** [use the system for a new or existing entity](docs/START_HERE.md). Every entity has one private [living record](docs/ENTITY_RECORD.md); every working session follows the [improvement loop](docs/CONTINUOUS_IMPROVEMENT.md) so useful lessons reach the shared process and code.
+
 A reusable rental bookkeeping worker and playbook. Zoho Books holds the official books. A scheduled Node worker applies approved rules, keeps its operational history in SQLite, and exchanges evidence, questions and acknowledgments with Muse through a private Drive folder. An optional AI reviewer proposes routine classifications within a budget; it cannot directly post.
 
 Start with the [executive one-pager](docs/EXECUTIVE_OVERVIEW.md) ([PDF](docs/ai-bookkeeper-executive-overview.pdf)) and [flowchart](docs/FLOWCHART.md) ([PDF](docs/ai-bookkeeper-flowchart.pdf)). The [implementation guide](docs/IMPLEMENTATION_GUIDE.md) gives the order of operations, owner interview, source checks, Wave-to-Zoho migration, worker setup and acceptance gates. It consolidates the lessons from two rental builds and their accounting reviews.
+
+Markdown guides are current. The printable PDFs are dated October 7, 2026 snapshots; use the current guides for capability and operating instructions.
 
 For ongoing use: [operator refresher](docs/OPERATOR_GUIDE.md), [monthly close](docs/MONTHLY_CLOSE.md), [year-end close](docs/YEAR_END_CLOSE.md), [CPA handoff](docs/CPA_TAX_HANDOFF.md) and [CPA brief template](docs/CPA_BRIEF_TEMPLATE.md). Future agents can reuse the [private coordination templates](docs/templates/COORDINATION.md) and [lessons learned](docs/LESSONS_LEARNED.md).
 
@@ -12,7 +16,11 @@ The implemented workflow supports a USD rental entity using Zoho's US data cente
 
 The sample configuration is fictional and cannot connect to Zoho. Its rules, allocation, identifiers, tenant patterns and dollar limits are examples, not advice or approved defaults. Keep one deployment per entity. Do not run overlapping workers against the same Zoho accounts.
 
-Property-level books are the default; preserve unit detail where it affects use, tenants, deposits or assets. **Current limits:** worker reports enforce accrual, and there is no annual depreciation/amortization posting command. Cash-basis close checks and additional bank/card/loan/deposit workflows need tested adaptations. See the guide's [capability table](docs/IMPLEMENTATION_GUIDE.md#what-the-code-does-today) before deployment. A documented procedure is not an implemented feature.
+Property-level books are the default; preserve unit detail where it affects use, tenants, deposits or assets. P&L reports support an explicit cash or accrual policy; optional additional ledger checks prevent closing when their reviewed evidence is missing. Annual depreciation/amortization posting, extra feeds and tenant subledgers remain procedures/adaptations. See the guide's [capability table](docs/IMPLEMENTATION_GUIDE.md#what-the-code-does-today) before deployment. A documented procedure is not an implemented feature.
+
+Set `company.reportingBasis` to `cash` or `accrual` according to the confirmed policy; omission preserves existing accrual behavior. This selects and validates the P&L basis. Complete account registers and trial-balance reconciliation retain their accrual ledger view. Verify actual provider results for each deployment.
+
+Optional `supplementalCloseAccounts` names additional accounts already in `config.accounts`, outside the core bank/card/mortgage/escrow checks. Each requires one exact-month review of movements/classifications plus a source closing balance. Missing or mismatched evidence blocks close. Pass the private review array to `close` with `--supplemental-review-file <path>`; see [review format](docs/IMPLEMENTATION_GUIDE.md#supplemental-ledger-review). The daily runner does not ingest these reviews and will leave these checks incomplete. This adds manual reviewed close checks, not new feeds or automatic classification.
 
 ## Install and verify locally
 

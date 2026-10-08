@@ -1,6 +1,8 @@
 # When you return to the books
 
-You should not need to remember the build conversation. Start in the entity's private shared folder and read the top of `STATUS.md`: what period is complete, what needs action and where the evidence lives. GitHub stores the reusable code and process; it does not store your actual books or secrets.
+You should not need to remember the build conversation. Bookmark the entity's canonical private `STATUS.md`: it tells you what period is complete, what needs action and where the evidence lives. Follow [ENTITY_RECORD](ENTITY_RECORD.md). GitHub stores the reusable code and process; it does not store your actual books or secrets.
+
+To resume, give an agent that link and say: "Read this living record and the repo's START_HERE. Tell me the current position, reuse completed evidence, and carry out the next authorized action. Update this same shared record, verify it, and promote any reusable lesson into the process. Do not ask me to reconstruct the old conversation."
 
 ## Where things live
 

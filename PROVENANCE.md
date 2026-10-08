@@ -17,3 +17,11 @@ The playbook was reviewed against the original build conversation and all 80 ava
 The update changes setup order to independent source checks before migration; adds batching, account/use history, deposit custody, current-balance checks after historical corrections, annual continuity and operator checklists; and distinguishes implemented worker behavior from agent/operator procedures. The source worker is unchanged by this documentation consolidation. Local synthetic tests and type checks remain separate from each deployment's live acceptance.
 
 Verification of this update: 141 tests passed, TypeScript checks passed, local document links checked, tracked text/PDF content scanned for private identities and credentials, and both single-page PDFs rendered and visually reviewed. No live accounts, deployments or schedules were changed.
+
+## Reusable adaptations and living records, October 8, 2026
+
+The second build's prepared cash-basis P&L and supplemental-ledger review adaptations were promoted into the common source with synthetic tests. P&L basis is configurable and validated; omitted basis preserves accrual. Supplemental manual-close reviews require exact-period evidence, reviewed movements and matching ledger balances. The daily runner does not ingest these reviews, so unattended supplemental completion remains unimplemented. No annual posting, extra feeds or tenant subledger is implied.
+
+START_HERE, ENTITY_RECORD and CONTINUOUS_IMPROVEMENT now define one canonical private entity record, session closeout, preservation of old history and promotion of useful lessons into actual checklists/code. Real entity records and source history remain private and are excluded from this repository.
+
+Verification: 151 tests and TypeScript checks passed locally. These are code checks, not a new financial audit or deployment. Existing October 7 PDFs are labeled historical snapshots; current Markdown documents carry the updated behavior. No accounting entries, schedules or installed workers were changed in this update.

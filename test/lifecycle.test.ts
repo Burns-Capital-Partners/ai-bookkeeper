@@ -13,6 +13,79 @@ import type { BankTransaction, CompanyConfig, JournalEntry } from "../src/types.
 import { ExistingBankMatchError, type ZohoBooksClient } from "../src/zoho.js";
 
 const template = JSON.parse(readFileSync("config/example-property.json", "utf8")) as CompanyConfig;
+
+test("omitted supplemental accounts block close even when the core accounts reconcile", async t => {
+  const f = setup(t);
+  f.config.accounts.security = "Deposit Bank";
+  f.config.supplementalCloseAccounts = ["Deposit Bank"];
+  const result = await runMonthlyClose(f.config, f.zoho, f.state, inputs());
+  assert.equal(result.complete, false);
+  assert.equal(result.steps.find(s => s.stepId === "supplemental:Deposit Bank")?.status, "blocked");
+  assert.equal(f.journals.length, 0);
+});
+
+test("supplemental review cannot hide wrong dates, duplicate evidence, invalid balances or an unreviewed movement ledger", async t => {
+  const valid = { accountName: "Deposit Bank", from: "2026-09-01", to: "2026-09-30", closingBalance: 700,
+    reviewer: "Reviewer", source: "September statement", note: "All movements and classifications checked", transactionsVerified: true };
+  const cases = [
+    [{ ...valid, from: "2026-09-02" }], [{ ...valid, to: "2026-08-31" }],
+    [{ ...valid, transactionsVerified: false }], [{ ...valid, reviewer: " " }],
+    [{ ...valid, source: "" }], [{ ...valid, note: "" }],
+    [{ ...valid, closingBalance: NaN }], [{ ...valid, closingBalance: 700.001 }],
+    [valid, valid], [{ ...valid, accountName: "Wrong account" }],
+  ];
+  for (const evidence of cases) {
+    const f = setup(t); f.config.accounts.security = "Deposit Bank";
+    f.config.supplementalCloseAccounts = ["Deposit Bank"]; f.balances["Deposit Bank"] = 700;
+    const report = await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews: evidence }));
+    assert.equal(report.complete, false);
+    assert.equal(report.steps.find(s => s.stepId === "supplemental:Deposit Bank")?.status, "blocked");
+  }
+});
+
+test("each supplemental ledger must match exact month-end evidence and resolved holds disappear on a clean rerun", async t => {
+  const f = setup(t); f.config.accounts.security = "Deposit Bank"; f.config.accounts.solar = "Solar Loan";
+  f.config.supplementalCloseAccounts = ["Deposit Bank", "Solar Loan"];
+  const reviews = ["Deposit Bank", "Solar Loan"].map(accountName => ({ accountName, from: "2026-09-01", to: "2026-09-30",
+    closingBalance: accountName === "Deposit Bank" ? 700 : 2000, reviewer: "Reviewer", source: "Month-end source",
+    note: "Movements and classifications verified", transactionsVerified: true }));
+  f.balances["Deposit Bank"] = 700; f.balances["Solar Loan"] = 2000.01;
+  assert.equal((await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews: reviews }))).complete, false);
+  f.balances["Solar Loan"] = 2000;
+  const result = await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews: reviews }));
+  assert.equal(result.complete, true);
+  assert.ok(f.reads.some(r => r[0] === "Solar Loan" && r[1] === "2026-09-30"));
+  assert.equal(f.state.getOpenFlags(f.config.company.name).length, 0);
+  assert.equal((await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews: reviews }))).complete, true);
+  assert.equal(f.journals.length, 0); assert.equal(f.transfers.length, 0);
+});
+
+test("supplemental source approval cannot substitute for an unreadable or invalid live balance", async t => {
+  for (const failure of ["unavailable", "nonfinite"]) {
+    const f = setup(t); f.config.accounts.security = "Deposit Bank";
+    f.config.supplementalCloseAccounts = ["Deposit Bank"];
+    const original = f.client.getLedgerBalance;
+    f.client.getLedgerBalance = async (name, date) => {
+      if (name !== "Deposit Bank") return original(name, date);
+      if (failure === "unavailable") throw new Error("No report");
+      return NaN;
+    };
+    const supplementalReviews = [{ accountName: "Deposit Bank", from: "2026-09-01", to: "2026-09-30", closingBalance: 0,
+      reviewer: "Reviewer", source: "Statement", note: "Reviewed all movements", transactionsVerified: true }];
+    assert.equal((await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews }))).complete, false);
+  }
+});
+
+test("a posting during close invalidates prior supplemental review even if its balance still matches", async t => {
+  const f = setup(t, [txn()]); f.config.accounts.security = "Deposit Bank";
+  f.config.supplementalCloseAccounts = ["Deposit Bank"];
+  const supplementalReviews = [{ accountName: "Deposit Bank", from: "2026-09-01", to: "2026-09-30", closingBalance: 0,
+    reviewer: "Reviewer", source: "Statement", note: "Reviewed all movements", transactionsVerified: true }];
+  const result = await runMonthlyClose(f.config, f.zoho, f.state, inputs({ supplementalReviews }));
+  assert.equal(f.journals.length, 1);
+  const step = result.steps.find(s => s.stepId === "supplemental:Deposit Bank");
+  assert.equal(step?.status, "blocked"); assert.match(step?.detail ?? "", /refresh/);
+});
 test("a possible manual posting is held without creating an uncertain write claim", async t => {
   const f = setup(t, [txn()]); f.client.checkSourceForPosting = async () => { throw new ExistingBankMatchError(); };
   const result = await f.run(); assert.equal(f.journals.length, 0);

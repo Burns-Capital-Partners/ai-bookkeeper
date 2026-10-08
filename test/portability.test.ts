@@ -9,6 +9,16 @@ import { BookkeeperState } from "../src/db.js";
 
 const example = JSON.parse(readFileSync("config/example-property.json", "utf8"));
 
+test("supplemental close accounts require distinct configured supplemental identities", () => {
+  const input = structuredClone(example); input.accounts.security = "Deposit Bank";
+  input.supplementalCloseAccounts = ["Deposit Bank"];
+  assert.deepEqual(validateConfig(input).supplementalCloseAccounts, ["Deposit Bank"]);
+  for (const extra of [null, "Deposit Bank", ["Unknown"], ["Deposit Bank", "Deposit Bank"], [input.accounts.tdBank], [input.accounts.mortgageEscrow]]) {
+    input.supplementalCloseAccounts = extra;
+    assert.throws(() => validateConfig(input), /Supplemental close accounts/);
+  }
+});
+
 test("an explicit database override cannot silently reuse another entity's history", () => {
   const path = join(mkdtempSync(join(tmpdir(), "entity-boundary-")), "state.db");
   const state = new BookkeeperState(path);
@@ -29,6 +39,22 @@ test("another entity can have one rental unit and its own organization and bank 
   assert.equal(validateConfig(input).company.name, "Another Rental");
   input.bankAccountIds.quicksilver = input.bankAccountIds.tdBank;
   assert.throws(() => validateConfig(input), /distinct verified bank account IDs/);
+});
+
+test("reporting basis is an explicit validated choice without changing legacy configs", () => {
+  const legacy = structuredClone(example);
+  delete legacy.company.reportingBasis;
+  assert.equal(validateConfig(legacy).company.reportingBasis, undefined);
+  for (const basis of ["cash", "accrual"]) {
+    const input = structuredClone(example);
+    input.company.reportingBasis = basis;
+    assert.equal(validateConfig(input).company.reportingBasis, basis);
+  }
+  for (const basis of ["Cash", "automatic", "", null, true]) {
+    const input = structuredClone(example);
+    input.company.reportingBasis = basis;
+    assert.throws(() => validateConfig(input), /Reporting basis/);
+  }
 });
 
 test("CLI rejects config traversal and missing selection before opening state or connecting", () => {

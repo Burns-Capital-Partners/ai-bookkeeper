@@ -1,5 +1,5 @@
 import { setTimeout as delay } from "node:timers/promises";
-import type { BankTransaction, JournalEntry } from "./types.js";
+import type { BankTransaction, JournalEntry, ReportingBasis } from "./types.js";
 
 type Json = Record<string, unknown>;
 interface Account { id: string; name: string; type: string }
@@ -10,6 +10,8 @@ export interface ZohoClientOptions {
   refreshToken?: string;
   apiDomain?: string;
   writeEnabled?: boolean;
+  /** P&L basis; complete ledger reconciliation keeps its existing accrual view. */
+  reportingBasis?: ReportingBasis;
   bankAccounts?: string[];
   accountIds?: Record<string, string>;
   fetch?: typeof fetch;
@@ -60,15 +62,16 @@ function reportAmount(value: unknown, label: string): number {
 function registerRows(value: unknown): Json[] {
   return array(value, "register rows").flatMap(row => row.account_transactions === undefined ? [row] : registerRows(row.account_transactions));
 }
-function reportContext(data: Json, type: string, from: string, to: string, range: boolean): Json {
+function reportContext(data: Json, type: string, from: string, to: string, range: boolean, basis: ReportingBasis = "accrual"): Json {
   const context = object(data.page_context, "report context");
+  const expectedBasis = basis === "cash" ? "Cash" : "Accrual";
   // Zoho can echo supplied dates while silently applying its default Today
   // filter. Check the effective filter as well as the requested date fields.
-  if (context.report_type !== type || context.report_basis !== "Accrual" ||
+  if (context.report_type !== type || context.report_basis !== expectedBasis ||
     context.applied_filter !== "TransactionDate.CustomDate" || (range && context.from_date !== from) || context.to_date !== to ||
-    String(context.cash_based) !== "false" || String(context.is_for_date_range) !== String(range) ||
+    String(context.cash_based) !== String(basis === "cash") || String(context.is_for_date_range) !== String(range) ||
     (!range && context.as_of_date !== to) || context.is_comparision_report === true ||
-    context.is_inv_txn_job_in_progress === true) throw new Error("Zoho report did not confirm the requested cutoff and accrual basis.");
+    context.is_inv_txn_job_in_progress === true) throw new Error(`Zoho report did not confirm the requested cutoff and ${basis} basis.`);
   return context;
 }
 
@@ -80,6 +83,7 @@ export class ZohoBooksClient {
   private fetcher: typeof fetch;
   constructor(private orgId: string, private opts: ZohoClientOptions) {
     if (!/^\d+$/.test(orgId)) throw new Error("Zoho organization ID must be numeric.");
+    if (opts.reportingBasis !== undefined && !["cash", "accrual"].includes(opts.reportingBasis)) throw new Error("Reporting basis must be cash or accrual.");
     if (opts.apiDomain && !["zohoapis.com", "www.zohoapis.com"].includes(opts.apiDomain)) throw new Error("This deployment supports the US Zoho data center only.");
     this.fetcher = opts.fetch ?? fetch;
   }
@@ -409,10 +413,11 @@ export class ZohoBooksClient {
   async getProfitAndLoss(fromDate: string, toDate: string): Promise<Record<string, number>> {
     const from = date(fromDate), to = date(toDate);
     if (from > to) throw new Error("Profit and loss dates are reversed.");
+    const basis = this.opts.reportingBasis ?? "accrual";
     const data = await this.request("GET", "/reports/profitandloss", {
-      filter_by: "TransactionDate.CustomDate", from_date: from, to_date: to, cash_based: "false", show_rows: "all",
+      filter_by: "TransactionDate.CustomDate", from_date: from, to_date: to, cash_based: String(basis === "cash"), show_rows: "all",
     });
-    const context = reportContext(data, "profit_and_loss", from, to, true);
+    const context = reportContext(data, "profit_and_loss", from, to, true, basis);
     if (context.show_rows !== "all" || context.has_more_page === true) throw new Error("Zoho profit and loss is incomplete.");
     const totals: Record<string, number> = {};
     const seen = new Set<string>();

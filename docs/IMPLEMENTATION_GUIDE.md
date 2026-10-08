@@ -1,6 +1,6 @@
 # Build an AI bookkeeper for the next entity
 
-Version 1.12 | October 7, 2026 | Consolidates two rental builds and their review lessons
+Version 1.13 | October 8, 2026 | Consolidates two rental builds and their review lessons
 
 Use this as the lead agent's runbook. Start with one property and one completed month. The goal is reliable prior-month books by the following 7th, with approved work continuing without daily owner supervision. The owner supplies business decisions; the agent prepares, verifies and advances the authorized work.
 
@@ -43,7 +43,7 @@ Property-level reporting is the default. Preserve tenant/deposit, asset and use-
 
 ## 2. Establish private records and verify sources
 
-Reuse the existing approved workspace. Create missing areas only; one current status and one review queue are sufficient. Copy the [coordination templates](templates/COORDINATION.md) into private entity storage, never populate them with real data in Git.
+Reuse the existing approved workspace and canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Create missing areas only; a small entity can keep context, access references and the queue in that one record. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
 
 ```text
 <private entity folder>/
@@ -104,13 +104,36 @@ An empty worker database is normal for a new deployment; it is not authority to 
 | Posting and recovery | Deterministic rules, guarded journals/transfers, local source/posting history, lock and explicit recovery for uncertain outcomes. One writer per overlapping Zoho account set. |
 | Shared handoff | Structured statements/context/answers, immutable input IDs, revisions/fingerprints, worker acceptance/errors, shared snapshots, encrypted backups and delivery receipts. Raw PDFs are not automatically ingested. |
 | Routine AI review | Optional DeepSeek proposal path, narrow learned rules from validated explicit answers, eligible 72-hour provisional decisions and $5 per-deployment local-calendar-month budget. No model tools or direct accounting writes. |
-| Reports | Current worker report calls enforce accrual. A cash-basis entity needs a reviewed/tested report-basis adaptation before worker close acceptance; a cash export in the UI does not repair this code. |
+| Reports | `company.reportingBasis` selects cash or accrual P&L; omission preserves accrual. The response must confirm basis and effective dates. Register/trial-balance reads retain the complete accrual ledger view. Synthetic tests do not prove an entity's live report visibility. |
 | Annual entries | `depreciation.frequency` is descriptive configuration. There is **no implemented annual depreciation/amortization posting command**. Use the reviewed agent/operator process in [YEAR_END_CLOSE](YEAR_END_CLOSE.md). |
-| Extra accounts/treatments | Deposit accounts, multiple cards, solar/other loans, PM settlements and other-entity charges may require tested adapters. Process instructions do not implement them. |
+| Extra accounts/treatments | `supplementalCloseAccounts` requires reviewed evidence and matching ledger balances for named extra accounts. Manual close accepts a review file; daily runs do not ingest it. This adds no extra feeds, posting rules or tenant subledger. Multiple cards, loans and PM settlements may still require tested adapters. |
 | Collection and notifications | Muse/another authorized collector downloads and normalizes evidence and actually delivers messages. Worker payload generation is not delivery; recurring collector/reminder execution is configured separately. |
 | Funds and non-rental entities | Reuse the process and controls, not an assumed compatible rental model. Define investor capital, holdings/valuations, fees, allocations and tax/reporting needs first. |
 
 Read `src/config.ts`, `src/index.ts`, `src/categorizer.ts`, `src/closer.ts`, `src/zoho.ts` and the existing tests when checking fit. Make the smallest required adaptation and add regression coverage for financial behavior. Do not add services, dependencies or a new database just to store context.
+
+### Supplemental ledger review
+
+List extra required ledgers by their exact configured account names in `supplementalCloseAccounts`. They must be distinct, present in `accounts`, and outside the four core bank/card/mortgage/escrow roles. For a manual close, pass `--supplemental-review-file <private-json-path>` alongside the existing close arguments. The JSON file is an array, with one review per required account:
+
+```json
+[
+  {
+    "accountName": "Tenant Deposit Bank",
+    "from": "2026-09-01",
+    "to": "2026-09-30",
+    "closingBalance": 700.25,
+    "reviewer": "Authorized reviewer",
+    "source": "private-source-reference",
+    "note": "All movements and classifications checked against the source.",
+    "transactionsVerified": true
+  }
+]
+```
+
+Amounts are account-currency amounts (700.25 means $700.25), not integer cents. Use the same signed convention as the ledger response. Missing, duplicate, malformed, wrong-period, unreadable or mismatching reviews block completion. Posting during close requires a refreshed review and rerun. A balance match alone is insufficient; the named reviewer must inspect movements and classifications. Deposit cash also needs a separate comparison with tenant obligations.
+
+**Manual-only input:** the daily runner and shared monthly-evidence schema do not carry these reviews. A scheduled recheck will mark a configured supplemental account incomplete even after a prior manual close. Preserve the manual acceptance receipt; do not describe supplemental accounts as an unattended close. Add and test a durable review handoff before that deployment requires automatic completion. Leaving required accounts out of config is not a workaround.
 
 ### Exact setup sequence
 

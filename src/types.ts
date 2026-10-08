@@ -3,6 +3,8 @@
  * Everything company-specific comes from the JSON config, never hardcoded here.
  */
 
+export type ReportingBasis = "cash" | "accrual";
+
 export interface CompanyConfig {
   company: {
     name: string;
@@ -10,6 +12,8 @@ export interface CompanyConfig {
     zohoOrgId: string;
     timezone: string;
     currency: string;
+    /** P&L reporting policy. Omission preserves the legacy accrual behavior. */
+    reportingBasis?: ReportingBasis;
     /** Fictional examples cannot connect to Zoho or post. */
     example?: boolean;
   };
@@ -24,6 +28,8 @@ export interface CompanyConfig {
   categorizationPatterns: CategorizationPattern[];
   flagRules: FlagRules;
   closeChecklist: ChecklistStep[];
+  /** Reviewed supplemental ledgers that must also reconcile before a close. */
+  supplementalCloseAccounts?: string[];
   escalation: EscalationPolicy;
   depreciation: {
     frequency: "annual" | "monthly";

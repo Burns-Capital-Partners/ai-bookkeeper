@@ -26,7 +26,7 @@ import { validateConfig } from "./config.js";
 import { ZohoBooksClient } from "./zoho.js";
 import { BookkeeperState } from "./db.js";
 import { categorizeTransactions } from "./categorizer.js";
-import { runMonthlyClose } from "./closer.js";
+import { runMonthlyClose, type CloseInputs } from "./closer.js";
 import { importInbox, exportPending } from "./handoff.js";
 import { pendingNotifications, runDaily } from "./runner.js";
 import { restoreBackup } from "./backup.js";
@@ -100,6 +100,7 @@ async function main(): Promise<void> {
     clientSecret: process.env.ZOHO_CLIENT_SECRET,
     refreshToken: process.env.ZOHO_REFRESH_TOKEN,
     writeEnabled: process.env.BOOKKEEPER_LIVE === "1",
+    reportingBasis: config.company.reportingBasis,
     bankAccounts: [config.accounts.tdBank!, config.accounts.quicksilver!],
     accountIds: { [config.accounts.tdBank!]: config.bankAccountIds.tdBank, [config.accounts.quicksilver!]: config.bankAccountIds.quicksilver },
   });
@@ -179,10 +180,19 @@ async function main(): Promise<void> {
           const r = argNumber(args, `rent-${unit.id}`);
           if (r !== undefined) rentReceived[unit.id] = r;
         }
+        let supplementalReviews: CloseInputs["supplementalReviews"];
+        if (args["supplemental-review-file"] !== undefined) {
+          const path = args["supplemental-review-file"];
+          if (typeof path !== "string" || !path.trim()) throw new Error("--supplemental-review-file requires a private JSON file path.");
+          const parsed: unknown = JSON.parse(readFileSync(path, "utf-8"));
+          if (!Array.isArray(parsed)) throw new Error("Supplemental review file must contain an array of account reviews.");
+          supplementalReviews = parsed;
+        }
         const report = await runMonthlyClose(config, zoho, state, {
           year,
           month,
           statementBalances,
+          supplementalReviews,
           rentReceived,
           requireSourceAudit: true,
           asOfDay: new Date().getDate(),

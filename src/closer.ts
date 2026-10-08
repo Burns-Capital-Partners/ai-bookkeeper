@@ -29,6 +29,11 @@ export interface CloseInputs extends ReconcileInputs {
   month: number; // 1-12
   /** Explicit human evidence for checks that the API cannot establish. */
   manualReview?: { period: string; reviewer: string; note: string; steps: string[] };
+  /** Explicit review of all movements/classifications plus a source closing balance. */
+  supplementalReviews?: {
+    accountName: string; from: string; to: string; closingBalance: number;
+    reviewer: string; source: string; note: string; transactionsVerified: boolean;
+  }[];
 }
 
 export async function runMonthlyClose(
@@ -177,6 +182,41 @@ export async function runMonthlyClose(
   } else {
     flagged("escrow-recorded", escrowFlags.map((f) => f.id));
     flagged("escrow-tieout", escrowFlags.map((f) => f.id));
+  }
+
+  // Supplemental accounts cannot disappear merely because the input omitted them.
+  // These remain reviewed ledgers; this does not add automated posting or source intake.
+  for (const account of config.supplementalCloseAccounts ?? []) {
+    const stepId = `supplemental:${account}`;
+    const description = `Supplemental ledger reviewed: ${account}`;
+    const reviews = Array.isArray(inputs.supplementalReviews) ? inputs.supplementalReviews.filter(r => r?.accountName === account) : [];
+    const review = reviews[0];
+    const text = (value: unknown): boolean => typeof value === "string" && Boolean(value.trim());
+    let problem: string | undefined;
+    if (cat.journalsCreated.length || cat.transfersCreated.length) {
+      problem = "Posting changed the ledger during this run; refresh the supplemental review and rerun the close.";
+    } else if (reviews.length !== 1 || !review || review.from !== start || review.to !== end ||
+        !text(review.reviewer) || !text(review.source) || !text(review.note) || review.transactionsVerified !== true ||
+        !Number.isFinite(review.closingBalance) || Math.abs(review.closingBalance * 100 - Math.round(review.closingBalance * 100)) > 1e-6) {
+      problem = `Exactly one reviewed source covering ${start} through ${end}, all movements/classifications and a finite closing balance with at most two decimal places is required.`;
+    } else {
+      try {
+        const actual = await zoho.getLedgerBalance(account, end);
+        if (!Number.isFinite(actual) || Math.abs(actual - review.closingBalance) > 0.005) {
+          problem = "The ledger closing balance does not match the reviewed source to the cent.";
+        }
+      } catch {
+        problem = "The supplemental ledger balance could not be read; source review alone cannot complete this check.";
+      }
+    }
+    if (problem) {
+      const flag = raiseCloseFlag(config, state, period, stepId, description, problem);
+      closeFlags.push(flag);
+      steps.push({ stepId, description, status: "blocked", detail: problem, flagIds: [flag.id] });
+    } else {
+      state.resolveIssue(company, `close:${period}:${stepId}`);
+      steps.push({ stepId, description, status: "complete", detail: `Source ${review!.source}; reviewed by ${review!.reviewer}: ${review!.note}`, flagIds: [] });
+    }
   }
 
   // Step 10: P&L anomaly scan.

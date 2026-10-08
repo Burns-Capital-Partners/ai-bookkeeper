@@ -7,6 +7,7 @@ export function validateConfig(value: unknown): CompanyConfig {
     throw new Error("A named USD company with a numeric Zoho organization ID is required.");
   }
   if (config.company.example !== undefined && typeof config.company.example !== "boolean") throw new Error("Invalid example marker.");
+  if (config.company.reportingBasis !== undefined && !["cash", "accrual"].includes(config.company.reportingBasis)) throw new Error("Reporting basis must be cash or accrual.");
   const ids = config.bankAccountIds;
   if (!ids || !/^\d+$/.test(ids.tdBank) || !/^\d+$/.test(ids.quicksilver) || ids.tdBank === ids.quicksilver) throw new Error("Two distinct verified bank account IDs are required.");
   new Intl.DateTimeFormat("en-US", { timeZone: config.company.timezone }).format();
@@ -14,6 +15,14 @@ export function validateConfig(value: unknown): CompanyConfig {
     if (typeof config.accounts?.[key] !== "string" || !config.accounts[key]!.trim()) throw new Error(`Missing configured account: ${key}.`);
   }
   if (new Set(Object.values(config.accounts)).size !== Object.values(config.accounts).length) throw new Error("Account names must be distinct.");
+  if (config.supplementalCloseAccounts !== undefined) {
+    const extra = config.supplementalCloseAccounts;
+    const core = [config.accounts.tdBank, config.accounts.quicksilver, config.accounts.mortgagePayable, config.accounts.mortgageEscrow];
+    if (!Array.isArray(extra) || new Set(extra).size !== extra.length || extra.some(name =>
+      typeof name !== "string" || !name.trim() || !Object.values(config.accounts).includes(name) || core.includes(name))) {
+      throw new Error("Supplemental close accounts must be distinct configured accounts outside the core reconciliation.");
+    }
+  }
   for (const share of [config.allocation.rentalShare, config.allocation.personalShare]) {
     if (!Number.isFinite(share) || share < 0 || share > 1) throw new Error("Invalid allocation share.");
   }

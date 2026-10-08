@@ -31,8 +31,8 @@ A repeatable setup for the next property
 
 ## Lessons that make the next build shorter
 
-- One lead, shared dated context and one current remaining-work list prevent repeated setup and conflicting status.
+- One private living record per entity holds the current position, standing rules, open issues and next action. Each session updates it and promotes useful lessons into the shared process or tested code.
 - Source checks precede migration. Verified amounts, correct purposes and duplicate-free reruns matter more than a green test or a successful API response.
-- Reuse the rental code without adding infrastructure. Cash-basis reports, extra account types and annual posting need explicit adaptations/procedures; funds need additional accounting design.
+- Reuse the rental code without adding infrastructure. Cash/accrual P&L and manual extra-ledger checks are implemented; extra feeds and annual posting still need explicit procedures/adaptations. Funds need additional accounting design.
 
-October 7, 2026 | Combined lessons from two builds. This is the operating plan; each entity must prove its own live acceptance. Annual posting and collection remain agent/operator procedures.
+October 8, 2026 | Combined lessons from two builds. This is the operating plan; each entity must prove its own live acceptance. Annual posting and collection remain agent/operator procedures.
