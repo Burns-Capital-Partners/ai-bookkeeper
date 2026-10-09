@@ -2,6 +2,8 @@
 
 Keep the existing private STATUS.md as the bookmark. It links to one owner/CPA CONTEXT.md. Reuse existing files and URLs; these are two views of the same books, not competing trackers.
 
+Both live in the approved shared Bookkeeping folder established by [DRIVE_FILING](DRIVE_FILING.md). Link its README and STATEMENT_INDEX.md for navigation and source coverage; the index supports these living documents rather than becoming another progress tracker.
+
 ## STATUS.md — completed, verified, next
 
 Aim for one screen, about 200–300 words. Use the [status template](templates/STATUS.md).

@@ -2,6 +2,7 @@
 
 - Read README.md and docs/IMPLEMENTATION_GUIDE.md before implementation. Read the entity's private STATUS.md and confirmed context before asking repeated questions.
 - Start with docs/START_HERE.md and docs/ENTITY_RECORD.md. Reuse the existing STATUS.md URL; keep it to about 200–300 words of completed/verified work and next actions. Maintain the linked one-page owner/CPA CONTEXT.md whenever facts or decisions change. Preserve lengthy evidence, technical instructions and old answers behind links, not in the running summary.
+- On every entity setup, follow docs/DRIVE_FILING.md: read the approved shared drive's 00) Start Here guide, create or reuse the Bookkeeping layout, and verify its statement index. On later visits, file new records in that same structure and update the same index; do not duplicate folders or repeat completed setup. BOOKKEEPER_SHARED_PATH targets Bookkeeping/Worker, with live state and secrets outside Drive.
 - Choose the smallest adaptation. This is a rental worker, not a general fund accounting platform. Keep Zoho as the official ledger.
 - Never copy credentials, actual statements, personal data, live state, production config or old Git history into this repository. Use synthetic fixtures. Private configs and runtime files remain excluded.
 - Preserve existing books and unrelated changes. No production posting, new schedule, irreversible migration, accounting-policy change or external message without applicable user authorization. Prepare concrete reviewable work before asking.

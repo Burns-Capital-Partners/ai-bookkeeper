@@ -1,6 +1,6 @@
 # Build an AI bookkeeper for the next entity
 
-Version 1.13 | October 8, 2026 | Consolidates two rental builds and their review lessons
+Version 1.14 | October 9, 2026 | Consolidates two rental builds and their review lessons
 
 Use this as the lead agent's runbook. Start with one property and one completed month. The goal is reliable prior-month books by the following 7th, with approved work continuing without daily owner supervision. The owner supplies business decisions; the agent prepares, verifies and advances the authorized work.
 
@@ -10,7 +10,7 @@ Read [README](../README.md), [capability limits](#what-the-code-does-today), the
 
 | Stage | Work | Evidence required to advance |
 |---|---|---|
-| 1. Scope and interview | Reuse/create private workspace; establish account, use and policy history | Dated owner answers, account map, cutover/pilot month, unresolved questions |
+| 1. Scope and interview | Read the drive's Start Here guide; establish Bookkeeping folders/index and account, use and policy history | Verified filing home, dated owner answers, account map, cutover/pilot month, unresolved questions |
 | 2. Source preflight | Inventory existing files; collect pilot and opening evidence; assess legacy reliability | Verified coverage manifest and independent balance bridges |
 | 3. Zoho and migration | Verify organization, chart and basis; prepare only missing history or supported opening entries | Reviewed migration proposal, authorized application, source-to-ledger reconciliation |
 | 4. Worker preparation | Confirm fit; configure isolated runtime, shared handoff, recovery and permissions | Tests, read check, accepted inputs, cloud receipts and offline restore |
@@ -43,22 +43,11 @@ Property-level reporting is the default. Preserve tenant/deposit, asset and use-
 
 ## 2. Establish private records and verify sources
 
-Reuse the existing approved workspace and canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Keep STATUS.md to a short running summary and CONTEXT.md to a concise owner/CPA context sheet; link existing detailed access/evidence records and queues. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
+Complete [DRIVE_FILING](DRIVE_FILING.md) on every new entity setup: read the approved shared drive's `00) Start Here` guide, create or reuse its Bookkeeping layout, and establish the linked statement index. For BCP this is `BCP/01) Investments/<entity or property>/Bookkeeping`. File statements by institution/source and issue year, reports/CPA packages by reporting year, and operational evidence/history under Worker. Reuse this layout and update the same index as new records arrive; do not repeat completed setup or create another archive.
 
-```text
-<private entity folder>/
-  STATUS.md                 short verified-work summary and next actions
-  CONTEXT.md                living owner/CPA facts, treatment and open decisions
-  REVIEW_QUEUE.md           unresolved questions, proposals and closure proof
-  ACCESS.md                 methods/MFA/recovery; references, never credentials
-  sources/                  unchanged bank, card, loan, PM, receipt/tax originals
-  source-manifest.csv       coverage, acquisition, original/observation, byte hash
-  staging/                  normalized inputs and proposed migration/journals
-  verification/             reconciliation, posting and rerun receipts
-  cpa/                      report sets, schedules, brief and delivery evidence
-```
+Preserve the canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Keep STATUS.md to a short running summary and CONTEXT.md to a concise owner/CPA context sheet; link existing detailed access/evidence records and queues. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
 
-These are operator records, not additional services. Worker-managed shared inbox/snapshots and encrypted backups follow [MUSE_HANDOFF](MUSE_HANDOFF.md) and [AUTONOMOUS_HANDOFF](AUTONOMOUS_HANDOFF.md). Keep the active SQLite database and credentials outside Drive. Git contains code, generic guides and synthetic examples only.
+These are operator records, not additional services. Worker-managed shared inbox/snapshots and encrypted backups live under `Bookkeeping/Worker` and follow [MUSE_HANDOFF](MUSE_HANDOFF.md) and [AUTONOMOUS_HANDOFF](AUTONOMOUS_HANDOFF.md). Keep the active SQLite database and credentials outside Drive. Git contains code, generic guides and synthetic examples only.
 
 ### Collect without repeated sign-ins
 
@@ -141,7 +130,7 @@ Amounts are account-currency amounts (700.25 means $700.25), not integer cents. 
 2. Copy `config/example-property.json` to Git-ignored `config/<slug>.json`. Verify organization, bank IDs/names, chart/customer identities, tenant/rent patterns, allocation, exception limits and destinations. Sample amounts and the sample mixed-use ratio are fictional. Set `company.example=false` only in the reviewed real config.
 3. On macOS: `node scripts/prepare-mac.mjs --config <slug>`. It prepares files and starts nothing. Runtime defaults to `~/Library/Application Support/AIBookkeeper/<slug>/` with its own env, state, handoff and job label. Inventory old deployments/schedulers and account overlap; per-host locks do not stop a different host writing the same books.
 4. Enter OAuth credentials only in that private `bookkeeper.env`. A Generate Code value is a one-time authorization code; exchange the approved code with the matching client and retain the actual `refresh_token`. Confirm org, scopes and data center. Start with `BOOKKEEPER_LIVE=0`, `BOOKKEEPER_AI_REVIEW=0`, `BOOKKEEPER_METADATA_REPAIR=0`. A read token does not prove write grants.
-5. Configure a separate private Drive desktop folder in `BOOKKEEPER_SHARED_PATH`, unique state/handoff paths, and `BOOKKEEPER_BACKUP_KEY`: 32 random bytes encoded as 64 hex characters. Save a recovery copy in the approved password manager. The live database is local; only backups are additionally encrypted. Shared context/snapshots remain readable to authorized folder members.
+5. Complete the [Drive filing checklist](DRIVE_FILING.md), then set `BOOKKEEPER_SHARED_PATH` to this entity's actual Drive desktop path ending in `Bookkeeping/Worker`, not the Bookkeeping root. Configure unique state/handoff paths and `BOOKKEEPER_BACKUP_KEY`: 32 random bytes encoded as 64 hex characters. Save a recovery copy in the approved password manager. The live database is local; only backups are additionally encrypted. Shared context/snapshots remain readable to authorized folder members. Preserve an existing worker path unless a controlled migration is authorized.
 6. Test the actual host using the commands below. Do not re-enter saved credentials without evidence they failed. Cloud shell output, a remote file read or a configured env key does not prove Mac execution/provider access.
 7. Exchange valid source records, context and receipts using the existing handoff contracts. Check accepted IDs and errors in worker output, not just filenames. Keep statement extraction and the source-linked normalized facts independently reviewable.
 8. Download a fresh cloud backup, verify its byte hash and restore to a **new** offline database outside Drive. Test integrity and relevant row counts; do not activate it or overwrite the live state during the drill. Verify snapshot and backup cloud receipts separately.
@@ -213,6 +202,7 @@ For another similar rental, repeat the fit/interview and isolate account IDs, po
 ## Acceptance checklist
 
 - [ ] Scope, account/use timeline, basis, cutover and authority are confirmed; unresolved items have owners.
+- [ ] Drive Start Here has been read; the shared Bookkeeping layout and linked statement index are verified and reused, with saved coverage/gaps stated accurately.
 - [ ] Originals/coverage are verified; migration and opening balances tie independently, including current balances.
 - [ ] Required adapters exist and pass meaningful tests; real config is private and account overlap is excluded.
 - [ ] Actual-host reads, accepted structured inputs, cloud delivery, key recovery and offline restore are proven.
