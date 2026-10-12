@@ -9,6 +9,11 @@ data/
 *.db-*
 *.sqlite*
 *.enc
+*.pem
+*.key
+*.p8
+*.p12
+*.pfx
 private/
 statements/
 reports/

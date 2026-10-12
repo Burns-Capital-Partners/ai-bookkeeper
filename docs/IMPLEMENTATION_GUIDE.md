@@ -43,7 +43,7 @@ Property-level reporting is the default. Preserve tenant/deposit, asset and use-
 
 ## 2. Establish private records and verify sources
 
-Complete [DRIVE_FILING](DRIVE_FILING.md) on every new entity setup: read the approved shared drive's `00) Start Here` guide, create or reuse its Bookkeeping layout, and establish the linked statement index. For BCP this is `BCP/01) Investments/<entity or property>/Bookkeeping`. File statements by institution/source and issue year, reports/CPA packages by reporting year, and operational evidence/history under Worker. Reuse this layout and update the same index as new records arrive; do not repeat completed setup or create another archive.
+Complete [DRIVE_FILING](DRIVE_FILING.md) on every new entity setup: read the approved shared drive's `00) Start Here` guide, create or reuse its Bookkeeping layout, and establish the linked statement index. Follow that drive's existing entity structure, for example `<shared drive>/Investments/<entity or property>/Bookkeeping`. File statements by institution/source and issue year, reports/CPA packages by reporting year, and operational evidence/history under Worker. Reuse this layout and update the same index as new records arrive; do not repeat completed setup or create another archive.
 
 Preserve the canonical STATUS.md URL. Follow [ENTITY_RECORD](ENTITY_RECORD.md), using the [status template](templates/STATUS.md) only when a record is missing. Verify shared read/update access early. Keep STATUS.md to a short running summary and CONTEXT.md to a concise owner/CPA context sheet; link existing detailed access/evidence records and queues. The [coordination templates](templates/COORDINATION.md) support larger workspaces; never populate them with real data in Git.
 

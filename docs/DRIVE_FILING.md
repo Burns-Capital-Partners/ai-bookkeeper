@@ -5,7 +5,7 @@ Every new entity setup must establish this filing layout before collecting recor
 ## Find the approved home first
 
 1. Read the approved shared drive's `00) Start Here/DRIVE_GUIDE.md` (or its existing equivalent), then the entity's current `STATUS.md` and `CONTEXT.md`. Follow the drive's folder rules and recorded access authority.
-2. For BCP, the home is `BCP/01) Investments/<entity or property>/Bookkeeping`. Reuse the existing deal folder and Bookkeeping folder. For another approved destination, follow its guide and record the equivalent home; do not create a second archive in My Drive.
+2. Follow the approved drive's existing entity layout, for example `<shared drive>/Investments/<entity or property>/Bookkeeping`. Reuse the existing entity and Bookkeeping folders. Record the verified home; do not create a second archive in My Drive.
 3. Inventory existing folders, loose files and report/CPA archives before adding anything. Record actual Drive folder/file IDs and links rather than guessing from a name or copying another entity's IDs. Verify read and update access without expanding sharing.
 
 ## Required layout
