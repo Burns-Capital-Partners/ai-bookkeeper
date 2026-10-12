@@ -56,7 +56,9 @@ After launch approval, `node scripts/prepare-mac.mjs --config <entity-slug> --en
 
 ## Reuse and sharing
 
-Keep this repository private initially; it has no public reuse license. Share with authorized collaborators through GitHub. Personal reports, statements, original tenant details, credentials and runtime history belong in each entity's private storage. Do not copy a production checkout or its Git history into a public repository. Public release and license selection are separate owner decisions.
+This project's code and documentation are available under the [MIT license](LICENSE). Contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md) for scope, privacy rules and verification steps.
+
+Personal reports, statements, original tenant details, credentials and runtime history belong in each entity's private storage. Use synthetic fixtures for examples and tests. Do not copy a production checkout or its Git history into this repository, or include private records in public issues, pull requests or Actions logs.
 
 To start another build, give an agent access to this repo and the entity's private records, then say:
 
